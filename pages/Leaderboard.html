@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaderboard | UNESCO Hackathon</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: #4facfe;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .btn {
+      margin-top: 20px;
+      display: inline-block;
+      background: #4facfe;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #00c3ff;
+    }
+  </style>
+</head>
+<body>
+<link rel="stylesheet" href="style.css">
+
+  <div class="container">
+    <h1>Leaderboard</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body">
+        <!-- Data will be inserted here -->
+      </tbody>
+    </table>
+    <a href="../index.html" class="btn">Back to Home</a>
+    <a href="../pages/about.html" class="btn">About</a>
+    <a href="../pages/leaderboard.html" class="btn">Leaderboard</a>
+
+  </div>
+
+  <script>
+    // Sample data (replace with localStorage or server data)
+    const scores = [
+      { name: "Abebe", score: 95 },
+      { name: "Team Unity", score: 88 },
+      { name: "Future Coders", score: 76 },
+      { name: "Sky Hackers", score: 65 }
+    ];
+
+    const tbody = document.getElementById("leaderboard-body");
+
+    scores
+      .sort((a, b) => b.score - a.score)
+      .forEach((player, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${player.name}</td>
+          <td>${player.score}</td>
+        `;
+        tbody.appendChild(row);
+      });
+  </script>
+</body>
+</html>
+    
