@@ -1,98 +1,64 @@
-// ===== Load Questions =====
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
+let playerName = "";
 
-// Fetch questions from JSON
-fetch('questions.json')
-    .then(response => response.json())
-    .then(data => {
-        questions = data;
-        showQuestion();
-    })
-    .catch(err => console.error("Error loading questions:", err));
+// Ask for player name
+window.onload = () => {
+  playerName = prompt("Enter your name:") || "Player";
+};
 
-// ===== Show Question =====
+// Load questions
+fetch("data/questions.json")
+  .then(res => res.json())
+  .then(data => {
+    questions = data;
+    showQuestion();
+  });
+
 function showQuestion() {
-    if (currentQuestion >= questions.length) {
-        showScore();
-        return;
-    }
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("next-btn").style.display = "none";
+  
+  if (currentQuestion < questions.length) {
+    document.getElementById("question").innerText = questions[currentQuestion].question;
+  } else {
+    document.getElementById("question").innerText = "🎉 Quiz Finished!";
+    document.getElementById("feedback").innerText = `Your final score is ${score}`;
+    document.querySelector(".buttons").style.display = "none";
 
-    const q = questions[currentQuestion];
-    document.getElementById('question').textContent = q.question;
-
-    const answersDiv = document.getElementById('answers');
-    answersDiv.innerHTML = ''; // clear previous buttons
-
-    q.options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.textContent = option;
-        btn.addEventListener('click', () => checkAnswer(option));
-        answersDiv.appendChild(btn);
-    });
-
-    document.getElementById('feedback').textContent = '';
+    saveToLeaderboard();
+  }
 }
 
-// ===== Check Answer =====
-function checkAnswer(selected) {
-    const q = questions[currentQuestion];
-    const feedback = document.getElementById('feedback');
+function checkAnswer(answer) {
+  let correct = questions[currentQuestion].answer;
+  let feedback = document.getElementById("feedback");
 
-    if (selected === q.answer) {
-        feedback.textContent = 'Correct! ✅';
-        feedback.className = 'feedback correct';
-        score++;
-    } else {
-        feedback.textContent = `Wrong! ❌ Correct: ${q.answer}`;
-        feedback.className = 'feedback wrong';
-    }
+  if (answer === correct) {
+    score++;
+    feedback.innerText = "✅ Correct! " + questions[currentQuestion].explanation;
+    feedback.style.color = "green";
+  } else {
+    feedback.innerText = "❌ Wrong! " + questions[currentQuestion].explanation;
+    feedback.style.color = "red";
+  }
 
-    document.getElementById('score').textContent = `Score: ${score} / ${questions.length}`;
-
-    currentQuestion++;
-    setTimeout(showQuestion, 1500); // move to next question after 1.5s
+  document.getElementById("score").innerText = "Score: " + score;
+  document.getElementById("next-btn").style.display = "inline-block";
 }
 
-// ===== Show Final Score =====
-function showScore() {
-    document.getElementById('quiz-container').innerHTML = `
-        <h2>Your final score: ${score} / ${questions.length}</h2>
-        <button onclick="saveScore()">Save Score & View Leaderboard</button>
-    `;
+function nextQuestion() {
+  currentQuestion++;
+  showQuestion();
 }
 
-// ===== Leaderboard =====
-function saveScore() {
-    let name = prompt("Enter your name for the leaderboard:") || "Anonymous";
-    let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-    leaderboard.push({ name: name, score: score });
-    leaderboard.sort((a, b) => b.score - a.score); // highest first
-    leaderboard = leaderboard.slice(0, 5); // top 5 only
-    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-    window.location.href = 'pages/leaderboard.html';
-}
+function saveToLeaderboard() {
+  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  leaderboard.push({ name: playerName, score: score });
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
 
-// ===== Display Leaderboard (in leaderboard.html) =====
-function displayLeaderboard() {
-    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-    const list = document.getElementById('leaderboard-list');
-    list.innerHTML = '';
-
-    if (leaderboard.length === 0) {
-        list.innerHTML = '<li>No scores yet!</li>';
-        return;
-    }
-
-    leaderboard.forEach((entry, index) => {
-        const li = document.createElement('li');
-        li.textContent = `${index + 1}. ${entry.name} - ${entry.score}`;
-        list.appendChild(li);
-    });
-}
-
-// If this is leaderboard.html, display the leaderboard on load
-if (document.getElementById('leaderboard-list')) {
-    displayLeaderboard();
+  // Show button to view leaderboard
+  let feedback = document.getElementById("feedback");
+  feedback.innerHTML += `<br><br><a href="pages/leaderboard.html"><button>View Leaderboard</button></a>`;
 }
