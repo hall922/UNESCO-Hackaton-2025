@@ -11,12 +11,13 @@ body {
   align-items: center;
   background-color: #222;
   padding: 15px 30px;
+  color: #fff;
 }
 
 .navbar .logo {
   font-size: 20px;
   font-weight: bold;
-  color: #fff;
+  color: #84d9f3;
 }
 
 .navbar .nav-links {
