@@ -3,38 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Leaderboard</title>
+  <title>Leaderboard - Media Literacy Quiz</title>
   <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* Leaderboard Styling */
+    #leaderboard-list {
+      list-style: none;
+      padding: 0;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    #leaderboard-list li {
+      background: #fff;
+      margin: 12px 0;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+      font-size: 18px;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease;
+    }
+
+    #leaderboard-list li:hover {
+      transform: scale(1.02);
+    }
+
+    /* Medal Colors */
+    .gold { color: #f1c40f; }
+    .silver { color: #bdc3c7; }
+    .bronze { color: #e67e22; }
+
+    /* Back Button */
+    #back-btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #back-btn:hover {
+      background: #2980b9;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-    <div class="logo">📚 Media Literacy</div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo"><i class="fa-solid fa-newspaper"></i> Media Literacy</div>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="pages/about.html">About</a></li>
-      <li><a href="#"><leaderboard.html class="active"></leaderboard></a></li>
+      <li><a href="../index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a></li>
+      <li><a href="../leaderboard.html" class="active"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
     </ul>
   </nav>
+
+  <!-- Leaderboard Section -->
   <div class="container">
     <h1>🏆 Leaderboard</h1>
     <ol id="leaderboard-list"></ol>
 
-      <button>⬅ Back to Quiz</button>
-    
+    <!-- Back Button -->
+    <a href="../index.html">
+      <button id="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Quiz</button>
+    </a>
   </div>
 
+  <!-- Script for Leaderboard -->
   <script>
-   
+    // Load leaderboard data from localStorage
     let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
 
+    // Sort by highest score
     leaderboard.sort((a, b) => b.score - a.score);
 
+    // Display leaderboard
     let list = document.getElementById("leaderboard-list");
-    leaderboard.forEach(player => {
-      let item = document.createElement("li");
-      item.innerText = `${player.name} - ${player.score} pts`;
-      list.appendChild(item);
-    });
+    if (leaderboard.length === 0) {
+      let empty = document.createElement("p");
+      empty.innerText = "No scores yet. Play the quiz to appear here!";
+      list.appendChild(empty);
+    } else {
+      leaderboard.forEach((player, index) => {
+        let item = document.createElement("li");
+
+        // Add medals for top 3
+        let medal = "";
+        if (index === 0) medal = '<i class="fa-solid fa-medal gold"></i> ';
+        else if (index === 1) medal = '<i class="fa-solid fa-medal silver"></i> ';
+        else if (index === 2) medal = '<i class="fa-solid fa-medal bronze"></i> ';
+
+        item.innerHTML = `${medal}${player.name} <span>${player.score} pts</span>`;
+        list.appendChild(item);
+      });
+    }
   </script>
 </body>
 </html>
+

@@ -8,27 +8,49 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar">
-    <div><i class="fa-solid fa-newspaper"></i> Media Literacy </div>
+    <div class="logo"><i class="fa-solid fa-newspaper"></i> Media Literacy</div>
     <ul class="nav-links">
-      <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i>Home</a></li>
-      <li><a href="pages/about.html">About</a></li>
-      <li><a href="#"><leaderboard.html"><i class="fa-solid fa-trorhy"></i></leaderboard></a></li>
+      <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="pages/about.html"><i class="fa-solid fa-circle-info"></i> About</a></li>
+      <li><a href="./pages/Leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
     </ul>
   </nav>
+
+  <!-- Progress bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Quiz Section -->
   <div class="container">
-    <h1>📰 Media Literacy Quiz</h1>
     <div id="quiz-box">
-      <p id="question">Loading question...</p>
+      <h2>Is this headline reliable?</h2>
+
+      <!-- Mascot / Image -->
+      <img src="./public/image/home.jpg" alt="Mascot" style="width:100px; margin: 15px auto; display:block;">
+
+      <!-- Headline -->
+      <p class="headline" id="question">"Loading headline..."</p>
+
+      <!-- Answer Buttons -->
       <div class="buttons">
-        <button onclick="checkAnswer('real')">✅ Real</button>
-        <button onclick="checkAnswer('fake')">❌ Fake</button>
+        <button onclick="checkAnswer('real')">✔ Reliable</button>
+        <button onclick="checkAnswer('fake')">✖ Fake News</button>
       </div>
-      <p id="feedback"></p>
+
+      <!-- Feedback -->
+      <div id="feedback"></div>
+
+      <!-- Score -->
       <p id="score">Score: 0</p>
     </div>
+
+    <!-- Next Question -->
     <button id="next-btn" onclick="nextQuestion()">Next Question</button>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -6,66 +6,101 @@ body {
   padding: 0;
 }
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #222;
+  background-color: rgb(48, 24, 72); /* darker purple */
   padding: 15px 30px;
-  color: #fff;
+  display: flex;
+  justify-content: space-between; /* logo left, nav right */
+  align-items: center;
 }
 
-.navbar .logo {
+.logo {
+  color: #f5f0fa;
   font-size: 20px;
   font-weight: bold;
-  color: #84d9f3;
-}
-
-.navbar .nav-links {
-  list-style: none;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 8px;
 }
 
-.navbar .nav-links li {
-  display: inline;
-}
-
-.navbar .nav-links a {
+.nav-links {
+  display: flex;
+  flex: 1; /* take available space */
+  justify-content: flex-end; /* push links to right side */
+  gap: 40px; /* evenly spaced apart */
+  margin: 0;
+  padding: 0;
   text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  transition: color 0.3s ease;
 }
 
-.navbar .nav-links a:hover,
-.navbar .nav-links a.active {
-  color: #f39c12; 
-}
-.navbar:hover {
-    background-color: #444;
-    transition: background-color 0.3s ease;
-}
-.container {
-  margin-top: 50px;
+nav a {
+  color: white; /* Set link color to white */
+  text-decoration: none;
 }
 
-h1 {
-  color: #2c3e50;
+nav a:hover {
+  color: rgb(200, 170, 230);
+  text-decoration: none;
 }
 
+nav ul li {
+  display: inline;
+  margin: 15px;
+}
+
+nav ul li a.active {
+  background-color: white;
+  color: rgb(200, 170, 230);
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  background: rgb(245, 240, 250);
+  height: 8px;
+  margin: 0;
+}
+
+.progress-bar {
+  height: 8px;
+  background: linear-gradient(to right, #3498db, #9b59b6);
+  width: 25%; /* dynamically update with JS */
+  border-radius: 4px;
+}
+
+/* Quiz Container */
 #quiz-box {
-  background: #51a2b1;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 500px;
-  border-radius: 10px;
-  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+  background: #fff;
+  padding: 25px;
+  margin: 40px auto;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
 }
 
-.buttons button {
-  margin: 10px;
-  padding: 10px 20px;
+/* Question Text */
+#quiz-box h2 {
   font-size: 18px;
+  color: #34495e;
+  margin-bottom: 15px;
+}
+
+/* Headline Styling */
+.headline {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 20px 0;
+  font-style: italic;
+}
+
+/* Buttons */
+.buttons button {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
   border: none;
   border-radius: 8px;
@@ -76,15 +111,46 @@ h1 {
   background: #27ae60;
   color: white;
 }
+.buttons button:first-child:hover {
+  background: #219150;
+}
+
 .buttons button:last-child {
   background: #e74c3c;
   color: white;
 }
+.buttons button:last-child:hover {
+  background: #c0392b;
+}
 
+/* Feedback Box */
+#feedback {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  border-left: 4px solid #f1c40f;
+  text-align: left;
+  font-size: 15px;
+  color: #2c3e50;
+}
+
+#feedback strong {
+  font-weight: bold;
+}
+
+#feedback small {
+  display: block;
+  margin-top: 8px;
+  color: #7f8c8d;
+  font-size: 13px;
+}
+
+/* Next Button */
 #next-btn {
   display: none;
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 18px;
   background: #3498db;
   color: white;
@@ -93,47 +159,6 @@ h1 {
   cursor: pointer;
 }
 
-#feedback {
-  font-weight: bold;
-  margin-top: 15px;
-}
-main.about-section {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-}
-
-main h1 {
-  font-size: 2rem;
-  color: #2c3e50;
-  margin-bottom: 15px;
-}
-
-main h2 {
-  margin-top: 25px;
-  color: #1abc9c;
-}
-
-main p {
-  margin-bottom: 15px;
-}
-
-main ul {
-  margin: 15px 0 20px 20px;
-}
-
-main ul li {
-  margin-bottom: 8px;
-}
-
-footer {
-  text-align: center;
-  padding: 15px;
-  background: #2c3e50;
-  color: white;
-  margin-top: 40px;
-  font-size: 0.9rem;
+#next-btn:hover {
+  background: #2980b9;
 }
