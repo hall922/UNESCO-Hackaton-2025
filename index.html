@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Media Literacy Quiz</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-  <!-- Navbar -->
+
   <nav class="navbar">
     <div class="logo"><i class="fa-solid fa-newspaper"></i> Media Literacy</div>
     <ul class="nav-links">
@@ -18,39 +19,184 @@
     </ul>
   </nav>
 
-  <!-- Progress bar -->
+ 
   <div class="progress-container">
     <div class="progress-bar" id="progress-bar"></div>
   </div>
 
-  <!-- Quiz Section -->
+
   <div class="container">
     <div id="quiz-box">
       <h2>Is this headline reliable?</h2>
 
-      <!-- Mascot / Image -->
+    
       <img src="./public/image/home.jpg" alt="Mascot" style="width:100px; margin: 15px auto; display:block;">
 
-      <!-- Headline -->
+    
       <p class="headline" id="question">"Loading headline..."</p>
 
-      <!-- Answer Buttons -->
+    
       <div class="buttons">
         <button onclick="checkAnswer('real')">✔ Reliable</button>
         <button onclick="checkAnswer('fake')">✖ Fake News</button>
       </div>
 
-      <!-- Feedback -->
       <div id="feedback"></div>
 
-      <!-- Score -->
       <p id="score">Score: 0</p>
     </div>
 
-    <!-- Next Question -->
     <button id="next-btn" onclick="nextQuestion()">Next Question</button>
   </div>
 
   <script src="script.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake News Quiz | UNESCO Hackathon</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Fake News Quiz 📰❌✅</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="pages/about.html">About</a>
+      <a href="pages/leaderboard.html">Leaderboard</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Welcome to the Fake News Challenge!</h2>
+    <p>
+      Test your skills in spotting real vs. fake headlines.  
+      Answer carefully and try to get the top spot on the leaderboard!
+    </p>
+
+    <button id="start-btn">Start Quiz 🚀</button>
+
+    <div id="quiz" class="hidden">
+      <div class="question-box">
+        <h3 id="question">Question will appear here</h3>
+        <div class="options hidden" id="options"> <!-- hidden initially -->
+          <button class="option-btn" data-choice="real">Real ✅</button>
+          <button class="option-btn" data-choice="fake">Fake ❌</button>
+        </div>
+      </div>
+      
+      <div id="feedback" class="feedback hidden"></div>
+      <div id="mascot" class="mascot hidden">🎉</div>
+      <p class="score">Score: <span id="score">0</span></p>
+      <button id="restart-btn" class="hidden">Restart </button> <!-- Restart -->
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 UNESCO Hackathon | Fake News Quiz</p>
+  </footer>
+
+  <script>
+    const startBtn = document.getElementById("start-btn");
+    const quizDiv = document.getElementById("quiz");
+    const questionEl = document.getElementById("question");
+    const optionsDiv = document.getElementById("options");
+    const optionBtns = document.querySelectorAll(".option-btn");
+    const feedbackEl = document.getElementById("feedback");
+    const mascotEl = document.getElementById("mascot");
+    const scoreEl = document.getElementById("score");
+    const restartBtn = document.getElementById("restart-btn");
+
+    let currentQuestion = 0;
+    let score = 0;
+    let quizStarted = false;
+
+    const questions = [
+      {
+        text: "NASA confirms water found on the sun.",
+        answer: "fake",
+        explanation: "Nope! The Sun is way too hot for water to exist."
+      },
+      {
+        text: "WHO declared COVID-19 a global pandemic in March 2020.",
+        answer: "real",
+        explanation: "Correct! That was when the outbreak was declared a pandemic."
+      },
+      {
+        text: "A man in Belgium built a car that runs on chocolate.",
+        answer: "fake",
+        explanation: "Funny idea, but not true. Chocolate fuel isn’t practical."
+      }
+    ];
+
+    function loadQuestion() {
+      if (currentQuestion < questions.length) {
+        questionEl.textContent = questions[currentQuestion].text;
+        feedbackEl.classList.add("hidden");
+        mascotEl.classList.add("hidden");
+        optionsDiv.classList.remove("hidden"); // show answer buttons
+      } else {
+        endQuiz();
+      }
+    }
+
+    function checkAnswer(choice) {
+      const q = questions[currentQuestion];
+      if (choice === q.answer) {
+        score++;
+        feedbackEl.textContent = "✅ Correct! " + q.explanation;
+        mascotEl.textContent = "🎉";
+      } else {
+        feedbackEl.textContent = "❌ Oops! " + q.explanation;
+        mascotEl.textContent = "😢";
+      }
+      feedbackEl.classList.remove("hidden");
+      mascotEl.classList.remove("hidden");
+      scoreEl.textContent = score;
+      currentQuestion++;
+      setTimeout(loadQuestion, 2000);
+    }
+
+    function endQuiz() {
+      questionEl.textContent = "Quiz Finished!";
+      feedbackEl.textContent = `Game Over! Your final score: ${score}`;
+      feedbackEl.classList.remove("hidden");
+      mascotEl.textContent = "🏆";
+      mascotEl.classList.remove("hidden");
+      optionsDiv.classList.add("hidden"); // hide buttons
+      restartBtn.classList.remove("hidden"); // show restart
+
+      const name = prompt("Enter your name for the leaderboard:");
+      if (name) {
+        let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+        leaderboard.push({ name, score });
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+      }
+    }
+
+    optionBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (quizStarted) checkAnswer(btn.dataset.choice);
+      });
+    });
+
+    startBtn.addEventListener("click", () => {
+      startBtn.style.display = "none";
+      quizDiv.classList.remove("hidden");
+      quizStarted = true;
+      currentQuestion = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      loadQuestion();
+    });
+
+    restartBtn.addEventListener("click", () => {
+      restartBtn.classList.add("hidden");
+      currentQuestion = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      feedbackEl.classList.add("hidden");
+      mascotEl.classList.add("hidden");
+      loadQuestion();
+    });
+  </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../style.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
+
     /* Leaderboard Styling */
     #leaderboard-list {
       list-style: none;
@@ -54,9 +55,39 @@
     #back-btn:hover {
       background: #2980b9;
     }
+
+    /* Extra leaderboard-specific styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #6d3a18ff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    tr:hover {
+      background: #eef5ff;
+    }
+    .empty-message {
+      text-align: center;
+      padding: 1rem;
+      color: #888;
+      font-style: italic;
+
+    }
   </style>
 </head>
 <body>
+
   <!-- Navbar -->
   <nav class="navbar">
     <div class="logo"><i class="fa-solid fa-newspaper"></i> Media Literacy</div>
@@ -77,6 +108,36 @@
       <button id="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Quiz</button>
     </a>
   </div>
+=======
+  <header>
+    <h1>Fake News Quiz 📰❌✅</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/leaderboard.html" class="active">Leaderboard</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Leaderboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body">
+        <!-- Dynamic leaderboard data will be inserted here -->
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>© 2025 UNESCO Hackathon | Fake News Quiz</p>
+  </footer>
+>>>>>>> 916b2df81ecd81e282a1062f531c2b439c3add60
 
   <!-- Script for Leaderboard -->
   <script>
@@ -89,9 +150,15 @@
     // Display leaderboard
     let list = document.getElementById("leaderboard-list");
     if (leaderboard.length === 0) {
+
       let empty = document.createElement("p");
       empty.innerText = "No scores yet. Play the quiz to appear here!";
       list.appendChild(empty);
+
+      const row = document.createElement('tr');
+      row.innerHTML = `<td colspan="3" class="empty-message">No scores yet!</td>`;
+      tbody.appendChild(row);
+
     } else {
       leaderboard.forEach((player, index) => {
         let item = document.createElement("li");

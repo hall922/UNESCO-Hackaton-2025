@@ -1,63 +1,53 @@
+// ===== Load Questions =====
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
-let playerName = "";
-let answered = false; // ✅ Track if the question was already answered
 
-// Ask for player name
-window.onload = () => {
-  playerName = prompt("Enter your name:") || "Player";
-};
+// Fetch questions from JSON
+fetch('questions.json')
+    .then(response => response.json())
+    .then(data => {
+        questions = data;
+        showQuestion();
+    })
+    .catch(err => console.error("Error loading questions:", err));
 
-// Load questions
-fetch("data/questions.json")
-  .then(res => res.json())
-  .then(data => {
-    questions = data;
-    showQuestion();
-  });
-
+// ===== Show Question =====
 function showQuestion() {
-  document.getElementById("feedback").innerText = "";
-  document.getElementById("next-btn").style.display = "none";
-  
-  // Reset answered flag
-  answered = false;
+    if (currentQuestion >= questions.length) {
+        showScore();
+        return;
+    }
 
-  // Re-enable buttons for new question
-  let buttons = document.querySelectorAll(".buttons button");
-  buttons.forEach(btn => {
-    btn.disabled = false;
-    btn.style.opacity = "1"; // make them look active
-  });
+    const q = questions[currentQuestion];
+    document.getElementById('question').textContent = q.question;
 
-  if (currentQuestion < questions.length) {
-    document.getElementById("question").innerText = questions[currentQuestion].question;
-  } else {
-    document.getElementById("question").innerText = "🎉 Quiz Finished!";
-    document.getElementById("feedback").innerText = `Your final score is ${score}`;
-    document.querySelector(".buttons").style.display = "none";
+    const answersDiv = document.getElementById('answers');
+    answersDiv.innerHTML = ''; // clear previous buttons
 
-    saveToLeaderboard();
-  }
+    q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option;
+        btn.addEventListener('click', () => checkAnswer(option));
+        answersDiv.appendChild(btn);
+    });
+
+    document.getElementById('feedback').textContent = '';
 }
 
-function checkAnswer(answer) {
-  // Prevent answering multiple times
-  if (answered) return;
-  answered = true;
+// ===== Check Answer =====
+function checkAnswer(selected) {
+    const q = questions[currentQuestion];
+    const feedback = document.getElementById('feedback');
 
-  let correct = questions[currentQuestion].answer;
-  let feedback = document.getElementById("feedback");
-
-  if (answer === correct) {
-    score++;
-    feedback.innerText = "✅ Correct! " + questions[currentQuestion].explanation;
-    feedback.style.color = "green";
-  } else {
-    feedback.innerText = "❌ Wrong! " + questions[currentQuestion].explanation;
-    feedback.style.color = "red";
-  }
+    if (selected === q.answer) {
+        feedback.textContent = 'Correct! ✅';
+        feedback.className = 'feedback correct';
+        score++;
+    } else {
+        feedback.textContent = `Wrong! ❌ Correct: ${q.answer}`;
+        feedback.className = 'feedback wrong';
+    }
 
   document.getElementById("score").innerText = "Score: " + score;
   document.getElementById("next-btn").style.display = "inline-block";
