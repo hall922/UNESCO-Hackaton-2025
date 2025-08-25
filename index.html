@@ -2,194 +2,153 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fake News Quiz – UNESCO Hackathon</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ffecd2, #fcb69f);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: #333;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #222;
-      text-align: center;
-    }
-    #quiz-box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 90%;
-      max-width: 500px;
-    }
-    #question {
-      font-size: 1.2rem;
-      margin: 20px 0;
-      font-weight: bold;
-    }
-    button {
-      margin: 10px;
-      padding: 12px 25px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .fake { background: #ff7675; color: #fff; }
-    .real { background: #55efc4; color: #fff; }
-    button:hover { opacity: 0.8; }
-    #feedback {
-      margin-top: 15px;
-      font-size: 1rem;
-      font-weight: bold;
-    }
-    #score {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      background: #ffeaa7;
-      padding: 10px;
-      border-radius: 10px;
-      display: inline-block;
-    }
-    #leaderboard {
-      margin-top: 30px;
-      padding: 15px;
-      background: #dfe6e9;
-      border-radius: 15px;
-    }
-    #leaderboard h2 {
-      margin-bottom: 10px;
-    }
-    ol {
-      text-align: left;
-      padding-left: 20px;
-    }
-    input {
-      padding: 8px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      margin: 10px 0;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake News Quiz | UNESCO Hackathon</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <link rel="stylesheet" href="style.css">
-
-<!-- Navigation links -->
-
+  <header>
+    <h1>Fake News Quiz 📰❌✅</h1>
     <nav>
-      <a href="pages/about.html" class="btn">About</a>
-      <a href="pages/leaderboard.html" class="btn">Leaderboard</a>
+      <a href="index.html">Home</a>
+      <a href="pages/about.html">About</a>
+      <a href="pages/leaderboard.html">Leaderboard</a>
     </nav>
+  </header>
 
-  <h1>📰 Fake or Real? Quiz</h1>
+  <div class="container">
+    <h2>Welcome to the Fake News Challenge!</h2>
+    <p>
+      Test your skills in spotting real vs. fake headlines.  
+      Answer carefully and try to get the top spot on the leaderboard!
+    </p>
 
-  <div id="quiz-box">
-    <p id="question">Loading question...</p>
-    <button class="fake" onclick="checkAnswer('Fake')">❌ Fake</button>
-    <button class="real" onclick="checkAnswer('Real')">✅ Real</button>
-    <p id="feedback"></p>
-    <p id="score">Score: 0</p>
+    <button id="start-btn">Start Quiz 🚀</button>
+
+    <!-- Quiz area -->
+    <div id="quiz" class="hidden">
+      <div class="question-box">
+        <h3 id="question">Question will appear here</h3>
+        <div class="options hidden" id="options"> <!-- hidden initially -->
+          <button class="option-btn" data-choice="real">Real ✅</button>
+          <button class="option-btn" data-choice="fake">Fake ❌</button>
+        </div>
+      </div>
+      
+      <div id="feedback" class="feedback hidden"></div>
+      <div id="mascot" class="mascot hidden">🎉</div>
+      <p class="score">Score: <span id="score">0</span></p>
+      <button id="restart-btn" class="hidden">Restart </button> <!-- Restart -->
+    </div>
   </div>
 
-  <div id="leaderboard">
-    <h2>🏆 Leaderboard</h2>
-    <input type="text" id="playerName" placeholder="Enter your name">
-    <button onclick="saveScore()">Save Score</button>
-    <ol id="leaderboardList"></ol>
-  </div>
+  <footer>
+    <p>&copy; 2025 UNESCO Hackathon | Fake News Quiz</p>
+  </footer>
 
-<script>
-  // Question bank
-  const questions = [
-    {
-      text: "Chocolate cures COVID-19",
-      answer: "Fake",
-      explanation: "No scientific proof; it's a sensational claim."
-    },
-    {
-      text: "NASA confirms water on the Moon",
-      answer: "Real",
-      explanation: "Verified by NASA in 2020."
-    },
-    {
-      text: "Teen builds a robot from recycled parts",
-      answer: "Real",
-      explanation: "Covered in local newspapers."
-    },
-    {
-      text: "Aliens run Facebook",
-      answer: "Fake",
-      explanation: "No credible source."
+  <script>
+    const startBtn = document.getElementById("start-btn");
+    const quizDiv = document.getElementById("quiz");
+    const questionEl = document.getElementById("question");
+    const optionsDiv = document.getElementById("options");
+    const optionBtns = document.querySelectorAll(".option-btn");
+    const feedbackEl = document.getElementById("feedback");
+    const mascotEl = document.getElementById("mascot");
+    const scoreEl = document.getElementById("score");
+    const restartBtn = document.getElementById("restart-btn");
+
+    let currentQuestion = 0;
+    let score = 0;
+    let quizStarted = false;
+
+    const questions = [
+      {
+        text: "NASA confirms water found on the sun.",
+        answer: "fake",
+        explanation: "Nope! The Sun is way too hot for water to exist."
+      },
+      {
+        text: "WHO declared COVID-19 a global pandemic in March 2020.",
+        answer: "real",
+        explanation: "Correct! That was when the outbreak was declared a pandemic."
+      },
+      {
+        text: "A man in Belgium built a car that runs on chocolate.",
+        answer: "fake",
+        explanation: "Funny idea, but not true. Chocolate fuel isn’t practical."
+      }
+    ];
+
+    function loadQuestion() {
+      if (currentQuestion < questions.length) {
+        questionEl.textContent = questions[currentQuestion].text;
+        feedbackEl.classList.add("hidden");
+        mascotEl.classList.add("hidden");
+        optionsDiv.classList.remove("hidden"); // show answer buttons
+      } else {
+        endQuiz();
+      }
     }
-  ];
 
-  let currentQuestion = 0;
-  let score = 0;
-
-  function loadQuestion() {
-    if (currentQuestion < questions.length) {
-      document.getElementById("question").textContent = questions[currentQuestion].text;
-      document.getElementById("feedback").textContent = "";
-    } else {
-      document.getElementById("question").textContent = "Quiz finished! 🎉";
-      document.getElementById("feedback").textContent = "Final Score: " + score + "/" + questions.length;
+    function checkAnswer(choice) {
+      const q = questions[currentQuestion];
+      if (choice === q.answer) {
+        score++;
+        feedbackEl.textContent = "✅ Correct! " + q.explanation;
+        mascotEl.textContent = "🎉";
+      } else {
+        feedbackEl.textContent = "❌ Oops! " + q.explanation;
+        mascotEl.textContent = "😢";
+      }
+      feedbackEl.classList.remove("hidden");
+      mascotEl.classList.remove("hidden");
+      scoreEl.textContent = score;
+      currentQuestion++;
+      setTimeout(loadQuestion, 2000);
     }
-  }
 
-  function checkAnswer(choice) {
-    if (currentQuestion >= questions.length) return;
+    function endQuiz() {
+      questionEl.textContent = "Quiz Finished!";
+      feedbackEl.textContent = `Game Over! Your final score: ${score}`;
+      feedbackEl.classList.remove("hidden");
+      mascotEl.textContent = "🏆";
+      mascotEl.classList.remove("hidden");
+      optionsDiv.classList.add("hidden"); // hide buttons
+      restartBtn.classList.remove("hidden"); // show restart
 
-    let q = questions[currentQuestion];
-    if (choice === q.answer) {
-      score++;
-      document.getElementById("feedback").textContent = "✅ Correct! " + q.explanation;
-    } else {
-      document.getElementById("feedback").textContent = "❌ Wrong! " + q.explanation;
+      const name = prompt("Enter your name for the leaderboard:");
+      if (name) {
+        let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+        leaderboard.push({ name, score });
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+      }
     }
-    document.getElementById("score").textContent = "Score: " + score;
-    currentQuestion++;
-    setTimeout(loadQuestion, 2000); // delay next question
-  }
 
-  // Leaderboard (local only)
-  function saveScore() {
-    let name = document.getElementById("playerName").value.trim();
-    if (!name) return;
-
-    let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    leaderboard.push({name, score});
-    leaderboard.sort((a, b) => b.score - a.score);
-    leaderboard = leaderboard.slice(0, 5); // keep top 5
-    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-    showLeaderboard();
-  }
-
-  function showLeaderboard() {
-    let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    let list = document.getElementById("leaderboardList");
-    list.innerHTML = "";
-    leaderboard.forEach(entry => {
-      let li = document.createElement("li");
-      li.textContent = `${entry.name} - ${entry.score}`;
-      list.appendChild(li);
+    optionBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (quizStarted) checkAnswer(btn.dataset.choice);
+      });
     });
-  }
 
-  loadQuestion();
-  showLeaderboard();
-</script>
+    startBtn.addEventListener("click", () => {
+      startBtn.style.display = "none";
+      quizDiv.classList.remove("hidden");
+      quizStarted = true;
+      currentQuestion = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      loadQuestion();
+    });
 
+    restartBtn.addEventListener("click", () => {
+      restartBtn.classList.add("hidden");
+      currentQuestion = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      feedbackEl.classList.add("hidden");
+      mascotEl.classList.add("hidden");
+      loadQuestion();
+    });
+  </script>
 </body>
 </html>

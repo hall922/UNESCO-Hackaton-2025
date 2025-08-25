@@ -1,16 +1,22 @@
-// ===== Load Questions =====
+// ===== Global Variables =====
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
 
-// Fetch questions from JSON
+// ===== Load Questions =====
 fetch('questions.json')
     .then(response => response.json())
     .then(data => {
         questions = data;
-        showQuestion();
     })
     .catch(err => console.error("Error loading questions:", err));
+
+// ===== Start Quiz =====
+function startQuiz() {
+    document.getElementById('start-btn').style.display = "none"; // hide start button
+    document.getElementById('quiz-container').style.display = "block"; // show quiz
+    showQuestion();
+}
 
 // ===== Show Question =====
 function showQuestion() {
@@ -33,20 +39,24 @@ function showQuestion() {
     });
 
     document.getElementById('feedback').textContent = '';
+    document.getElementById('mascot').innerHTML = ''; // clear mascot
 }
 
 // ===== Check Answer =====
 function checkAnswer(selected) {
     const q = questions[currentQuestion];
     const feedback = document.getElementById('feedback');
+    const mascotDiv = document.getElementById('mascot');
 
     if (selected === q.answer) {
         feedback.textContent = 'Correct! ✅';
         feedback.className = 'feedback correct';
         score++;
+        mascotDiv.innerHTML = `<img src="assets/mascot-happy.png" alt="Happy Mascot" class="mascot-img">`;
     } else {
         feedback.textContent = `Wrong! ❌ Correct: ${q.answer}`;
         feedback.className = 'feedback wrong';
+        mascotDiv.innerHTML = `<img src="assets/mascot-sad.png" alt="Sad Mascot" class="mascot-img">`;
     }
 
     document.getElementById('score').textContent = `Score: ${score} / ${questions.length}`;

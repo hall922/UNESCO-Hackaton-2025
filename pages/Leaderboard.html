@@ -6,73 +6,47 @@
   <title>Leaderboard | UNESCO Hackathon</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-    body {
-      background: linear-gradient(to right, #4facfe, #00f2fe);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      width: 90%;
-      max-width: 600px;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      font-size: 2rem;
-      color: #333;
-    }
-
+    /* Extra leaderboard-specific styling */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 1.5rem;
     }
-
     th, td {
       padding: 12px;
       text-align: center;
       border-bottom: 1px solid #ddd;
     }
-
     th {
-      background: #4facfe;
+      background: #6d3a18ff;
       color: white;
     }
-
     tr:nth-child(even) {
       background: #f9f9f9;
     }
-
-    .btn {
-      margin-top: 20px;
-      display: inline-block;
-      background: #4facfe;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-      margin-right: 10px;
+    tr:hover {
+      background: #eef5ff;
     }
-
-    .btn:hover {
-      background: #00c3ff;
+    .empty-message {
+      text-align: center;
+      padding: 1rem;
+      color: #888;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Leaderboard</h1>
+  <header>
+    <h1>Fake News Quiz 📰❌✅</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/leaderboard.html" class="active">Leaderboard</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Leaderboard</h2>
     <table>
       <thead>
         <tr>
@@ -85,12 +59,11 @@
         <!-- Dynamic leaderboard data will be inserted here -->
       </tbody>
     </table>
-    <div style="margin-top: 20px;">
-      <a href="../index.html" class="btn">Home</a>
-      <a href="about.html" class="btn">About</a>
-      <a href="leaderboard.html" class="btn">Leaderboard</a>
-    </div>
-  </div>
+  </main>
+
+  <footer>
+    <p>© 2025 UNESCO Hackathon | Fake News Quiz</p>
+  </footer>
 
   <script>
     // Load leaderboard from localStorage
@@ -99,7 +72,7 @@
 
     if (leaderboard.length === 0) {
       const row = document.createElement('tr');
-      row.innerHTML = `<td colspan="3">No scores yet!</td>`;
+      row.innerHTML = `<td colspan="3" class="empty-message">No scores yet!</td>`;
       tbody.appendChild(row);
     } else {
       // Sort descending and take top 5
